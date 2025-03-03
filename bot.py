@@ -1,46 +1,42 @@
-import logging  
-from telegram import Update  
-from telegram.ext import Application, CommandHandler, MessageHandler, filters  
-import config  
+import logging
+import requests
+from telegram import Update
+from telegram.ext import CallbackContext
+import config
 
-# Import Handlers
-from handlers.start import start  
-from handlers.admin import ban_user  
-from handlers.user_management import check_user  
-from handlers.wolfram import wolfram_query  
-from handlers.ai_router import ai_router_response  
-from handlers.math_solver import solve_math  
-from handlers.chat import chat  
-from handlers.image_processing import process_image  
-from handlers.file_handler import handle_document  
-
-# Configure Logging
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    level=logging.INFO,
-)
 logger = logging.getLogger(__name__)
 
-def main():
-    """Main function to start the bot"""
-    application = Application.builder().token(config.BOT_TOKEN).build()
+async def ai_router_response(update: Update, context: CallbackContext):
+    """Handles AI-based responses using OpenRouter API."""
+    user_message = " ".join(context.args) if context.args else ""
 
-    # Register Command Handlers
-    application.add_handler(CommandHandler("start", start))
-    application.add_handler(CommandHandler("register", check_user))
-    application.add_handler(CommandHandler("ban", ban_user))
-    application.add_handler(CommandHandler("wolfram", wolfram_query))
-    application.add_handler(CommandHandler("ai", ai_router_response))
-    application.add_handler(CommandHandler("solve", solve_math))
+    if not user_message:
+        await update.message.reply_text("Please provide a query. Example: /ai Explain quantum mechanics")
+        return
 
-    # Register Message Handlers
-    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, chat))
-    application.add_handler(MessageHandler(filters.PHOTO, process_image))
-    application.add_handler(MessageHandler(filters.Document.ALL, handle_document))
+    logger.info(f"Received AI request from {update.message.chat.username}: {user_message}")
 
-    # Start Bot
-    logger.info("Bot is running...")
-    application.run_polling()
+    # API Request to OpenRouter
+    url = "https://openrouter.ai/api/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {config.OPENROUTER_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "model": "gpt-4o",  # Ensure correct model name
+        "messages": [{"role": "user", "content": user_message}],
+        "stream": False  # Make it True if handling streamed responses
+    }
 
-if __name__ == "__main__":
-    main()
+    try:
+        response = requests.post(url, headers=headers, json=data)
+        logger.info(f"OpenRouter Response: {response.status_code} - {response.text}")
+
+        if response.status_code == 200:
+            ai_text = response.json()["choices"][0]["message"]["content"]
+            await update.message.reply_text(ai_text)
+        else:
+            await update.message.reply_text(f"Error from OpenRouter: {response.text}")
+    except Exception as e:
+        logger.error(f"AI response error: {str(e)}")
+        await update.message.reply_text("AI service is currently unavailable.")
