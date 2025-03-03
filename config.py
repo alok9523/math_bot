@@ -1,7 +1,7 @@
 import os  
 
 # Bot Token (Replace with your actual bot token)
-BOT_TOKEN = os.getenv("BOT_TOKEN", "7604560900:AAHWFEFEu3DsovVtYmAiZbj5bL25YLG8nKE")
+BOT_TOKEN = os.getenv("BOT_TOKEN", "7889602638:AAFtqbV5K_4uCEJcCL4DmdnkdJ0QCzVjrtg")
 
 # API Keys (Replace with actual keys)
 WOLFRAM_API_KEY = os.getenv("WOLFRAM_API_KEY", "3GJAG3-3RA3EGRUQ7")
