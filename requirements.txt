@@ -1,0 +1,6 @@
+python-telegram-bot==20.8  
+requests==2.31.0  
+wolframalpha==5.0.0  
+matplotlib==3.8.2  
+pillow==10.1.0  
+sqlite3  # Built-in, but added for clarity
