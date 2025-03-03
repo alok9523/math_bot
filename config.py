@@ -16,4 +16,4 @@ LOG_FILE = "logs/bot.log"
 LOG_LEVEL = "INFO"
 
 # Other Settings
-ADMINS = [2068973892]  # Replace with Telegram user IDs of admins
+ADMINS = [6195379665]  # Replace with Telegram user IDs of admins
