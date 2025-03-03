@@ -5,7 +5,8 @@ BOT_TOKEN = os.getenv("BOT_TOKEN", "7812347902:AAGCfdy6r70fMzx0Eorx2rTKb0YQO1K_x
 
 # API Keys (Replace with actual keys)
 WOLFRAM_API_KEY = os.getenv("WOLFRAM_API_KEY", "3GJAG3-3RA3EGRUQ7")
-AI_ROUTER_API_KEY = os.getenv("AI_ROUTER_API_KEY", "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"")
+
+AI_ROUTER_API_KEY = os.getenv("AI_ROUTER_API_KEY", "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")
 
 # Database File Paths
 USER_DB_PATH = "database/users.db"
