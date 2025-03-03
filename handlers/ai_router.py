@@ -21,7 +21,7 @@ async def ai_router_response(update: Update, context: CallbackContext):
     # OpenRouter API request
     url = "https://openrouter.ai/api/v1/chat/completions"
     headers = {
-        "Authorization": f"Bearer {config.OPENROUTER_API_KEY}",
+        "Authorization": f"Bearer {config.AI_ROUTER_API_KEY}",
         "Content-Type": "application/json",
         "HTTP-Referer": "https://yourwebsite.com",  # Replace with your actual site URL if needed
         "X-Title": "YourBotName"  # Replace with your bot name if needed
